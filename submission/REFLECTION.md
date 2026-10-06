@@ -8,12 +8,12 @@
 
 **Họ Tên:** Cao Văn Cường
 **MSSV:** 2A202602493
-**Cohort:** _<A20-K1 / A20-K2 / ...>_
+**Cohort:** A20-K4
 **Ngày submit:** 2026-10-06
 
 ---
 
-## 1. Hardware & runtime  *(rubric 1, 2 — 10 điểm)*
+## 1. Hardware & runtime _(rubric 1, 2 — 10 điểm)_
 
 > Từ `make probe`. Paste output hoặc điền tay.
 
@@ -39,15 +39,15 @@ phần serving sang CPU-only (§5).
 
 ---
 
-## 2. Đo lường  *(rubric 3, 4, 5 — 20 điểm)*
+## 2. Đo lường _(rubric 3, 4, 5 — 20 điểm)_
 
 > Paste bảng từ `benchmarks/01-quickstart-results.md` (`make bench` tự sinh).
 > Chạy với `threads=10 ngl=99 ctx=2048 max_tokens=64`.
 
 | Quantization | Size (GB) | Load (ms) | TTFT P50/P95 (ms) | TPOT P50/P95 (ms) | E2E P50/P95/P99 (ms) | Decode (tok/s) |
-|---|--:|--:|--:|--:|--:|--:|
-| Q4_K_M | 0.50 | 7310 | 337 / 454 | 24.2 / 24.7 | 1830 / 1978 / 1978 | 41.4 |
-| UD-Q2_K_XL | 0.39 | 4664 | 438 / 473 | 46.1 / 50.9 | 3339 / 3652 / 3652 | 21.7 |
+| ------------ | --------: | --------: | ----------------: | ----------------: | -------------------: | -------------: |
+| Q4_K_M       |      0.50 |      7310 |         337 / 454 |       24.2 / 24.7 |   1830 / 1978 / 1978 |           41.4 |
+| UD-Q2_K_XL   |      0.39 |      4664 |         438 / 473 |       46.1 / 50.9 |   3339 / 3652 / 3652 |           21.7 |
 
 **Quan sát** (≤ 60 chữ):
 
@@ -58,15 +58,15 @@ giúp mà dequant 2-bit tốn thêm ALU. Hỏi cùng 3 câu (`temperature=0`): c
 
 ---
 
-## 3. Serving under load  *(rubric 8, 9, 10 — 20 điểm)*
+## 3. Serving under load _(rubric 8, 9, 10 — 20 điểm)_
 
 > Từ `benchmarks/02-server-results.md` (`make load-report`).
 > Server: `LAB_N_GPU_LAYERS=0 LAB_N_THREADS=8`, `--parallel 4`, `ctx=2048`.
 
-| Users | RPS | P50 (ms) | P95 (ms) | P99 (ms) | Eff. concurrency | Failures |
-|--:|--:|--:|--:|--:|--:|--:|
-| 10 | 0.64 | 12000 | 20000 | 23000 | 8.3 | 0.0% |
-| 50 | 0.64 | 25000 | 58000 | 58000 | 18.3 | 0.0% |
+| Users |  RPS | P50 (ms) | P95 (ms) | P99 (ms) | Eff. concurrency | Failures |
+| ----: | ---: | -------: | -------: | -------: | ---------------: | -------: |
+|    10 | 0.64 |    12000 |    20000 |    23000 |              8.3 |     0.0% |
+|    50 | 0.64 |    25000 |    58000 |    58000 |             18.3 |     0.0% |
 
 - **Offered load tăng 5×, throughput thực tăng:** 1.00×
 - **P95 tăng:** 2.90×
@@ -85,17 +85,17 @@ batched-bench cho thấy thêm batch không tăng tổng tok/s trên CPU này.
 
 ---
 
-## 4. Integration  *(rubric 12, 13 — 15 điểm)*
+## 4. Integration _(rubric 12, 13 — 15 điểm)_
 
 > Từ `make pipeline`. Nói thật cái nào real, cái nào stub — stub **không** mất điểm.
 
-| Day | Piece | Real hay stub? |
-|---|---|---|
-| N16 Cloud/IaC | không có, chạy local | stub |
-| N17 Data pipeline | `TOY_DOCS` hard-code (6 doc) | stub |
-| N18 Lakehouse | không có, doc nằm trong bộ nhớ | stub |
-| N19 Vector + features | `retrieve()` keyword overlap, không embedding | stub |
-| N20 Serving | `llama-server` | real |
+| Day                   | Piece                                         | Real hay stub? |
+| --------------------- | --------------------------------------------- | -------------- |
+| N16 Cloud/IaC         | không có, chạy local                          | stub           |
+| N17 Data pipeline     | `TOY_DOCS` hard-code (6 doc)                  | stub           |
+| N18 Lakehouse         | không có, doc nằm trong bộ nhớ                | stub           |
+| N19 Vector + features | `retrieve()` keyword overlap, không embedding | stub           |
+| N20 Serving           | `llama-server`                                | real           |
 
 **Latency split** (mean của 3 query, từ output của `pipeline.py`):
 
@@ -112,7 +112,7 @@ prefill 14–19%, và ~2.2 s cố định nằm ngoài server timings. Để gi�
 
 ---
 
-## 5. The single change that mattered most  *(rubric 11 — 10 điểm)*
+## 5. The single change that mattered most _(rubric 11 — 10 điểm)_
 
 > **Phần quan trọng nhất của report.** Không cần bonus track: `make tune` đã cho bạn
 > một before/after thật (`benchmarks/01-tuning-tg128.md`). Đổi quantization,
@@ -161,7 +161,7 @@ hyperthreading hoặc nằm trên E-core — nên mình serve với `-t 8`.
 
 ---
 
-## 6. Bonus  *(optional — tối đa 10 điểm)*
+## 6. Bonus _(optional — tối đa 10 điểm)_
 
 > Bỏ trống nếu không làm. Xem `docs/bonus/README.md`. Đừng làm hết — **một** finding sâu
 > ăn điểm hơn năm bảng nông.
@@ -182,7 +182,7 @@ _(để trống nếu bạn không làm phần này)_
 
 ---
 
-## 7. Điều làm bạn ngạc nhiên nhất  *(optional)*
+## 7. Điều làm bạn ngạc nhiên nhất _(optional)_
 
 "GPU offload" làm decode chậm hơn, và continuous batching chạy đủ 4/4 slot mà gần như không tăng
 tổng tok/s: trên laptop không có GPU rời, slot thêm chỉ chia nhau cùng một lượng compute.
@@ -213,7 +213,7 @@ xem được → 0 điểm.
 
 ---
 
-## 9. Khai báo sử dụng AI  *(xem `docs/RULES.md` §3)*
+## 9. Khai báo sử dụng AI _(xem `docs/RULES.md` §3)_
 
 Claude Code (Claude Opus 5.5): chạy các lệnh lab trên máy tôi, chạy thêm `llama-bench` /
 `llama-batched-bench` để so CPU vs iGPU, sửa lỗi encoding UTF-8 trong `lib/labkit.py` và
